@@ -1,6 +1,6 @@
 <template>
   <div class="danMaku">
-    <canvas id="danmaku">
+    <canvas id="danmaku" :style='danMakuStyle'>
     </canvas>
   </div>
 </template>
@@ -9,13 +9,45 @@
 import createDanMaku from './index.js'
 export default {
   name: 'danMaku',
-  data () {
-    return {
-      msgText: ['嘤嘤嘤', '前方高能预警', '许愿清泉流响', '注意弹幕礼仪哦！'],
+  mounted () {
+    createDanMaku(this.innerText, this.danMakuSetting)
+  },
+  props: {
+    width: {
+      type: [String, Number],
+      default: '600px'
+    },
+    height: {
+      type: [String, Number],
+      default: '300px'
+    },
+    innerText: {
+      type: Array,
+      default: () => {
+        return ['嘤嘤嘤', '前方高能预警', '许愿清泉流响', '注意弹幕礼仪哦！']
+      }
+    },
+    danMakuSetting: {
+      type: Object,
+      default: () => {
+        return {
+          topValue: 100,
+          speedValue: 0.3,
+          textFont: {
+            size: '20px',
+            font: 'Arial'
+          }
+        }
+      }
     }
   },
-  mounted () {
-    createDanMaku(this.msgText)
+  computed: {
+    danMakuStyle () {
+      return {
+        width: this.width + 'px',
+        height: this.height + 'px'
+      }
+    }
   }
 }
 </script>

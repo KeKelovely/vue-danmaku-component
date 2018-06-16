@@ -1,58 +1,63 @@
-var createDanMaku = function (msgText) {
-    var getTop = function () {
-      return Math.random() * 100 + 20
+var createDanMaku = function (innerText, options) {
+  // set the basic params: text, color, top, offset, left
+  var msg = {
+    text: innerText,
+    danMakuColor: [],
+    danMakuTop: [],
+    danMakuLeft: [],
+    danMakuOffset: []
+  }
+  // set Top(distance from the canvas Element) params
+  var getTop = function () {
+    return Math.random() * options.topValue + 20
+  }
+  // set random Color
+  var getColor = function () {
+    return '#' + Math.ceil(Math.random() * 0xffffff).toString(16)
+  }
+  // set Speed , and the Orginal SpeedValue is 1 (for making it fast enough)
+  var getSpeed = function () {
+    return Math.random() * options.speedValue + 1
+  }
+  // if the canvas element does exists
+  if (document.getElementById('danmaku')) {
+    var d = document.getElementById('danmaku')
+    var x = d.getContext('2d')
+    var r = d.getBoundingClientRect()
+    var w = r.right - r.left
+    var h = r.bottom - r.top
+    var left = w
+    // set the params
+    // left is the original position where the danMaku Start, default value is the width of element Canvas
+    // if u want to make it show earlier, you can decrease the value of left
+    for (let i = 0; i < msg.text.length; i++) {
+      msg.danMakuColor.push(getColor())
+      msg.danMakuTop.push(getTop())
+      msg.danMakuOffset.push(getSpeed())
+      msg.danMakuLeft.push(left)
     }
-    var getColor = function () {
-      return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
+    // draw danMaku
+    var drawText = function (msg, i) {
+      msg.danMakuLeft[i] -= msg.danMakuOffset[i]
+      x.fillStyle = msg.danMakuColor[i]
+      x.fillText(msg.text[i], msg.danMakuLeft[i], msg.danMakuTop[i])
     }
-    var getOffset = function () {
-      return Math.random() * 0.3 + 1
-    }
-    var msg = {
-      text: msgText,
-      danmucolor: [],
-      danmutop: [],
-      offset: [],
-      left: []
-    }
-    if (document.getElementById('danmaku')) {
-      var d = document.getElementById('danmaku'),
-          x = d.getContext('2d'),
-          r = d.getBoundingClientRect(),
-          w = r.right - r.left,
-          h = r.bottom - r.top,
-          left = w
-      var getMsgData = function(msg) {
-        msg.danmucolor = [],
-        msg.danmutop = [],
-        msg.offset = [],
-        msg.left = []
-        for (var i in msg.text) {
-          msg.danmucolor.push(getColor())
-          msg.danmutop.push(getTop())
-          msg.offset.push(getOffset())
-          msg.left.push(left)
+    // u can also use setInterval to make this animation
+    // but It seems that window.requestAnimationFrame is a better way!
+    var anime = function () {
+      x.clearRect(0, 0, w, h)
+      // this is the Font Setting
+      x.font = options.textFont.size + ' ' + options.textFont.font
+      for (let i = 0; i < msg.text.length; i++) {
+        if (msg.danMakuLeft[i] < -1 * x.measureText(msg.text[i]).width) {
+          msg.danMakuLeft[i] = 500
         }
-      }
-      getMsgData(msg)
-      var drawText = function (msg, i) {
-        msg.left[i] -= msg.offset[i]
-        x.fillStyle = msg.danmucolor[i]
-        x.fillText(msg.text[i], msg.left[i], msg.danmutop[i])
-      }
-      var anime = function () {
-        x.clearRect(0, 0, w, h)
-        x.font = "20px Arial"
-        for (var i in msg.text) {
-          if (msg.left[i] < -1 * x.measureText(msg.text[i]).width) {
-            msg.left[i] = 500
-          }
-          drawText(msg, i)
-        }
-        window.requestAnimationFrame(anime)
+        drawText(msg, i)
       }
       window.requestAnimationFrame(anime)
     }
+    window.requestAnimationFrame(anime)
+  }
 }
 
 export default createDanMaku
