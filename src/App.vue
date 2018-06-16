@@ -29,5 +29,7 @@ export default {
 </script>
 
 <style>
-
+  body {
+    background: #333;
+  }
 </style>

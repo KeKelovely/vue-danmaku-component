@@ -26,7 +26,7 @@ var createDanMaku = function (innerText, options) {
     var r = d.getBoundingClientRect()
     var w = r.right - r.left
     var h = r.bottom - r.top
-    var left = w
+    var left = w - 200
     // set the params
     // left is the original position where the danMaku Start, default value is the width of element Canvas
     // if u want to make it show earlier, you can decrease the value of left
@@ -50,7 +50,7 @@ var createDanMaku = function (innerText, options) {
       x.font = options.textFont.size + ' ' + options.textFont.font
       for (let i = 0; i < msg.text.length; i++) {
         if (msg.danMakuLeft[i] < -1 * x.measureText(msg.text[i]).width) {
-          msg.danMakuLeft[i] = w
+          msg.danMakuLeft[i] = w - 200
         }
         drawText(msg, i)
       }

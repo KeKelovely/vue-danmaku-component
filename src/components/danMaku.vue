@@ -57,6 +57,8 @@ export default {
 #danmaku {
   width: 600px;
   height: 300px;
+  background: #fff;
+  opacity: .9;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
