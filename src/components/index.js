@@ -50,7 +50,7 @@ var createDanMaku = function (innerText, options) {
       x.font = options.textFont.size + ' ' + options.textFont.font
       for (let i = 0; i < msg.text.length; i++) {
         if (msg.danMakuLeft[i] < -1 * x.measureText(msg.text[i]).width) {
-          msg.danMakuLeft[i] = 500
+          msg.danMakuLeft[i] = w
         }
         drawText(msg, i)
       }
